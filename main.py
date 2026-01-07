@@ -678,6 +678,17 @@ class App(QWidget):
         if "device_dir" in self.settings:
             self.device_dir = self.settings["device_dir"]
             self.dev_lbl.setText(f"Device: {self.device_dir}")
+            
+            # --- Auto-Check Logic on Startup ---
+            if os.path.exists(self.device_dir):
+                music_sub = os.path.join(self.device_dir, "Music")
+                if os.path.exists(music_sub):
+                    self.dev_lbl.setText(f"Device: {self.device_dir}   ✅ (Target: /Music)")
+                    self.dev_lbl.setStyleSheet("color: green; font-weight: bold;")
+                else:
+                    self.dev_lbl.setText(f"Device: {self.device_dir}")
+                    self.dev_lbl.setStyleSheet("color: black;")
+            # -----------------------------------
 
     # --- Logic ---
     
@@ -686,30 +697,50 @@ class App(QWidget):
         if d: self.music_dir = d; self.music_lbl.setText(f"Music: {d}"); self.settings["music_dir"] = d; save_settings(self.settings)
 
     def pick_device(self):
-        d = QFileDialog.getExistingDirectory(self, "Device")
+        d = QFileDialog.getExistingDirectory(self, "Device (Select Drive Root)")
         if d:
-            # Check if a "Music" folder exists
+            # 1. Smart Detection: Did they pick the specific Music folder by mistake?
+            if os.path.basename(d).lower() == "music":
+                # Move one level up to get the true Root
+                d = os.path.dirname(d)
+
             music_subfolder = os.path.join(d, "Music")
             
-            if not os.path.exists(music_subfolder):
-                # Ask the user if they want to create it
+            # 2. Check if Music folder exists
+            if os.path.exists(music_subfolder):
+                self.device_dir = d
+                # Update UI to confirm we found the subfolder
+                self.dev_lbl.setText(f"Device: {d}   ✅ (Target: /Music)")
+                self.dev_lbl.setStyleSheet("color: green; font-weight: bold;")
+            else:
+                # 3. If missing, prompt to create
                 reply = QMessageBox.question(
                     self, "Setup Device", 
-                    "No 'Music' folder found on this device.\n\n"
-                    "Would you like to create one? (Recommended for organization)",
+                    f"Selected Root: {d}\n\n"
+                    "No 'Music' folder found here.\n"
+                    "Create one automatically? (Recommended)",
                     QMessageBox.Yes | QMessageBox.No
                 )
                 
                 if reply == QMessageBox.Yes:
                     try:
                         os.makedirs(music_subfolder)
-                        QMessageBox.information(self, "Success", "Created 'Music' folder.\nYour music will be copied there.")
+                        self.device_dir = d
+                        self.dev_lbl.setText(f"Device: {d}   ✅ (Target: /Music)")
+                        self.dev_lbl.setStyleSheet("color: green; font-weight: bold;")
+                        QMessageBox.information(self, "Success", "Created 'Music' folder.")
                     except Exception as e:
                         QMessageBox.warning(self, "Error", f"Could not create folder: {e}")
+                        self.device_dir = d
+                        self.dev_lbl.setText(f"Device: {d} (No Music Folder)")
+                        self.dev_lbl.setStyleSheet("color: red;")
+                else:
+                    # User said No, use root directly
+                    self.device_dir = d
+                    self.dev_lbl.setText(f"Device: {d} (Root)")
+                    self.dev_lbl.setStyleSheet("color: black;")
 
-            self.device_dir = d
-            self.dev_lbl.setText(f"Device: {d}")
-            self.settings["device_dir"] = d
+            self.settings["device_dir"] = self.device_dir
             save_settings(self.settings)
 
     def start_scan(self):
