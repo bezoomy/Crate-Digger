@@ -7,7 +7,7 @@
 ## 📖 About
 **CrateDigger** is a Python desktop application for music collectors. Instead of manually dragging and dropping folders, CrateDigger helps you "roll" a random selection of albums based on your preferred genres.
 
-It automatically calculates file sizes and fills your device up to a safety limit (e.g., leaving exactly 200MB free), ensuring you maximize space without crashing your device's database.
+It automatically calculates file sizes and fills your device up to a safety limit (e.g., leaving around 500MB free), ensuring you maximize space without crashing your device's database.
 
 ## ✨ Key Features
 * **🎲 Storage-Aware Randomizer:** Automatically selects random albums to fill your device until it hits a specific free-space safety margin.
