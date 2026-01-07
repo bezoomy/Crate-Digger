@@ -15,9 +15,7 @@ from PySide6.QtWidgets import (
     QMessageBox, QDialog, QDialogButtonBox, QHeaderView, QInputDialog, QAbstractItemView,
     QSlider, QSpinBox, QFrame, QGridLayout, QRadioButton, QButtonGroup, QMenu
 )
-# Added QUrl and QSize to QtCore imports
 from PySide6.QtCore import Qt, QThread, Signal, QRunnable, QThreadPool, QObject, QSize, QUrl
-# Added QDesktopServices and QAction to QtGui imports (Note: QAction is actually in QtGui in PySide6)
 from PySide6.QtGui import QColor, QBrush, QPixmap, QAction, QDesktopServices
 
 from constants import (
@@ -264,7 +262,6 @@ class GenrePreviewDialog(QDialog):
         
         # The Table
         self.table = QTableWidget(len(results), 5)
-        # FIXED: Removed Qt.QSize, used QSize directly
         self.table.setIconSize(QSize(80, 80)) 
         self.table.setHorizontalHeaderLabels(["Artist", "Album", "Genre Change", "Write Genre?", "Save Cover?"])
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -926,7 +923,7 @@ class App(QWidget):
         for path, ar, al, ra, sz in self.album_db:
             if path in self.album_overrides: c = self.album_overrides[path]
             elif ra in self.genre_map: c = self.genre_map[ra]
-            else: c, _ = suggest_canonical(raw, self.canonical_genres)
+            else: c, _ = suggest_canonical(ra, self.canonical_genres)
             
             if c not in allowed: continue
             
