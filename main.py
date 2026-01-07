@@ -1,10 +1,8 @@
 # main.py
-import sys
 import os
 import shutil
 import json
 import random
-import time
 import urllib.request
 from collections import Counter
 
@@ -15,7 +13,7 @@ from PySide6.QtWidgets import (
     QMessageBox, QDialog, QDialogButtonBox, QHeaderView, QInputDialog, QAbstractItemView,
     QSlider, QSpinBox, QFrame, QGridLayout, QRadioButton, QButtonGroup, QMenu
 )
-from PySide6.QtCore import Qt, QThread, Signal, QRunnable, QThreadPool, QObject, QSize, QUrl
+from PySide6.QtCore import Qt, Signal, QRunnable, QThreadPool, QObject, QSize, QUrl
 from PySide6.QtGui import QColor, QBrush, QPixmap, QAction, QDesktopServices
 
 from constants import (
@@ -1057,3 +1055,5 @@ if __name__ == "__main__":
     w = App()
     w.show()
     app.exec()
+    
+    
