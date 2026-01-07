@@ -4,3 +4,5 @@ __pycache__/
 settings.json
 .vscode/
 .idea/
+rockbox_autofill_settings.json
+device_inventory.json
