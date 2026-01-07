@@ -2,12 +2,18 @@
 
 **A smart music randomizer and sync tool for your iPod and portable devices.**
 
-> **Note:** This project is open source! It was designed to solve the problem of managing massive music libraries on devices with limited storage. Feel free to fork it, fix it, or improve it.
+> **Note:** This project is open source! Feel free to fork it, fix it, or improve it.
 
 ## 📖 About
 **CrateDigger** is a Python desktop application for music collectors. Instead of manually dragging and dropping folders, CrateDigger helps you "roll" a random selection of albums based on your preferred genres.
 
 It automatically calculates file sizes and fills your device up to a safety limit (e.g., leaving around 500MB free), ensuring you maximize space without crashing your device's database.
+
+### 💡 Why I Built This: The Cure for Decision Fatigue
+
+> We've all been there: You have **2TB** of music on your hard drive, but your portable player only holds **128GB**. You spend hours staring at your library, trying to curate the "perfect" sync list, only to end up listening to the same 10 albums.
+>
+> **CrateDigger** solves the "Analysis Paralysis" of the music hoarder. It takes the decision-making out of the equation, rolling the dice to fill your device with a fresh mix of forgotten gems and old favorites—instantly.
 
 ## ✨ Key Features
 * **🎲 Storage-Aware Randomizer:** Automatically selects random albums to fill your device until it hits a specific free-space safety margin.
