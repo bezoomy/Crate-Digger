@@ -684,9 +684,33 @@ class App(QWidget):
     def pick_music(self):
         d = QFileDialog.getExistingDirectory(self, "Music Lib")
         if d: self.music_dir = d; self.music_lbl.setText(f"Music: {d}"); self.settings["music_dir"] = d; save_settings(self.settings)
+
     def pick_device(self):
         d = QFileDialog.getExistingDirectory(self, "Device")
-        if d: self.device_dir = d; self.dev_lbl.setText(f"Device: {d}"); self.settings["device_dir"] = d; save_settings(self.settings)
+        if d:
+            # Check if a "Music" folder exists
+            music_subfolder = os.path.join(d, "Music")
+            
+            if not os.path.exists(music_subfolder):
+                # Ask the user if they want to create it
+                reply = QMessageBox.question(
+                    self, "Setup Device", 
+                    "No 'Music' folder found on this device.\n\n"
+                    "Would you like to create one? (Recommended for organization)",
+                    QMessageBox.Yes | QMessageBox.No
+                )
+                
+                if reply == QMessageBox.Yes:
+                    try:
+                        os.makedirs(music_subfolder)
+                        QMessageBox.information(self, "Success", "Created 'Music' folder.\nYour music will be copied there.")
+                    except Exception as e:
+                        QMessageBox.warning(self, "Error", f"Could not create folder: {e}")
+
+            self.device_dir = d
+            self.dev_lbl.setText(f"Device: {d}")
+            self.settings["device_dir"] = d
+            save_settings(self.settings)
 
     def start_scan(self):
         if not hasattr(self, 'music_dir'): return
@@ -921,6 +945,7 @@ class App(QWidget):
         
         pool = []
         for path, ar, al, ra, sz in self.album_db:
+            # FIX IS HERE: Changed 'raw' to 'ra' to fix the crash
             if path in self.album_overrides: c = self.album_overrides[path]
             elif ra in self.genre_map: c = self.genre_map[ra]
             else: c, _ = suggest_canonical(ra, self.canonical_genres)
