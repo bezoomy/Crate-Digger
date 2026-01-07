@@ -2,67 +2,101 @@
 
 **A smart music randomizer and sync tool for your iPod and portable devices.**
 
-> **Note:** This project is totally open source! It was originally my idea to solve the problem of large libraries vs. small storage, but I am releasing it to the world. Feel free to fork it, fix it, improve it, or do whatever you like with it.
+> **Note:** This project is open source! It was designed to solve the problem of managing massive music libraries on devices with limited storage. Feel free to fork it, fix it, or improve it.
 
 ## 📖 About
-**CrateDigger** is a Python desktop application designed for music collectors who have massive local libraries but limited space on their portable devices (like iPods, Walkmans, or SD cards).
+**CrateDigger** is a Python desktop application for music collectors. Instead of manually dragging and dropping folders, CrateDigger helps you "roll" a random selection of albums based on your preferred genres.
 
-Instead of manually dragging and dropping folders, CrateDigger helps you "roll" a random selection of albums based on your preferred genres. It automatically calculates the file sizes and fills your device up to a safety limit (e.g., leaving exactly 200MB free), ensuring you maximize space without crashing your device's database.
+It automatically calculates file sizes and fills your device up to a safety limit (e.g., leaving exactly 200MB free), ensuring you maximize space without crashing your device's database.
 
 ## ✨ Key Features
 * **🎲 Storage-Aware Randomizer:** Automatically selects random albums to fill your device until it hits a specific free-space safety margin.
-* **📂 Genre Canonicalization:** Maps messy metadata (e.g., "90s Alt Rock", "Indie Pop") into clean, main categories (e.g., "Rock", "Pop") for better folder sorting on the device.
+* **📂 Genre Canonicalization:** Maps messy metadata (e.g., "90s Alt Rock", "Indie Pop") into clean, main categories (e.g., "Rock", "Pop") for better folder sorting.
 * **🎨 Automatic Art Fetcher:** Identifies albums missing cover art and automatically fetches them from MusicBrainz/CoverArtArchive.
 * **🏷️ Tag & Genre Correction:** Verify and update MP3 tags directly within the app.
 * **🎛️ Playlist Generator:** Create "Mixtape" M3U playlists based on duration (e.g., "Make me a 60-minute Rock playlist").
-* **🚀 Smart Syncing:** specific logic to handle file copying, ensuring existing albums aren't re-copied to save time.
-* **🎧 Instant Preview:** Right-click any album to open the folder or preview a track instantly.
+* **🚀 Smart Syncing:** Logic checks for existing albums to avoid re-copying files.
+
+---
 
 ## 🛠️ Installation
 
 ### Prerequisites
-* Python 3.8+
-* `pip`
+* Python 3.8 or higher
+* `pip` (Python package manager)
 
-### Setup
+### Setup Steps
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/yourusername/cratedigger.git](https://github.com/yourusername/cratedigger.git)
-    cd cratedigger
+    git clone [https://github.com/bezoomy/Crate-Digger.git](https://github.com/bezoomy/Crate-Digger.git)
+    cd Crate-Digger
     ```
 
 2.  **Install dependencies:**
     ```bash
-    pip install PySide6 mutagen requests
+    pip install -r requirements.txt
     ```
+    *(If `requirements.txt` is missing, run: `pip install PySide6 mutagen requests`)*
 
 3.  **Run the application:**
     ```bash
     python main.py
     ```
 
-## 📦 Basic Usage
-1.  **Select Folders:** Point the app to your computer's Music Library and your Device's root folder.
-2.  **Scan:** Click "Scan Library" to index your music.
-3.  **Filter:** Select which genres you want to include in the random roll.
-4.  **Roll:** Click the dice icon! The app will select albums until your device is full.
-5.  **Copy:** Click "Start Copy" to move the files to your device.
+---
 
-## 📦 Genre Tag Fixing
-1.  **Select Folders:** Point the app to your computer's Music Library and your Device's root folder.
-2.  **Scan:** Click "Scan Library" to index your music.
-3.  **Filter:** Select which genres you want to include in the random roll.
-4.  **Roll:** Click the dice icon! The app will select albums until your device is full.
-5.  **Copy:** Click "Start Copy" to move the files to your device.
+## 📖 User Guide
 
-## 🤝 Contributing
-I threw this code together to solve a specific need, but there is plenty of room for improvement!
+### 🚀 Quick Start: "Just Fill My iPod"
+Follow these steps to instantly fill your device with a random selection of music.
 
-* **Found a bug?** Please open an issue.
-* **Have a feature idea?** Fork the repo and submit a Pull Request.
-* **UI/UX:** If you are good with PySide6 styling, feel free to make it look prettier!
+1.  **Select Paths:**
+    * Click **🎵 Select Music Library** and choose the folder on your computer where your MP3s live.
+    * Click **📱 Select Device (Root)** and pick your device drive (e.g., `E:/`).
+    * *Note: If your device is empty, the app will offer to create a 'Music' folder for you.*
 
-## 📜 License & Credits
-**Original Concept by:** BEZOOMY
+2.  **Scan:**
+    * Click **🔍 Scan Library**. The app will index your albums and sort them into clean categories (Rock, Pop, Electronic, etc.).
 
+3.  **Roll:**
+    * Click **🎲 Roll Random Albums**.
+    * The app will select albums until your device is full (leaving a safety buffer of free space).
+
+4.  **Sync:**
+    * Click **🚀 Start Copy**.
+    * The app will copy the files. It automatically skips albums that are already on the device to save time.
+
+### 🎛️ The "Filter & Roll" Section
+Located at the bottom of the window, these controls determine exactly which albums get picked during the randomization process.
+
+* **Genre Selection (Left List):** Uncheck any genre here to exclude it completely. (e.g., Uncheck "Holiday" to ensure Christmas music isn't synced in July).
+* **Max/Artist (Dropdown):** Limits how many albums from a single artist can be picked.
+    * *Example:* Set to **3**. If the randomizer picks 3 David Bowie albums, it will stop picking Bowie and move to other artists.
+* **Include Text:** Prioritizes albums containing these words (e.g., `Best Of`).
+* **Exclude Text:** Skips any album containing these words (e.g., `Live`, `Demo`).
+* **Skip Existing:** If checked, the app will not try to re-copy albums that are already on the device.
+
+### 🏷️ Editing Genres & Categories
+Your music library probably has messy genres. CrateDigger groups these into clean **Main Categories** (e.g., "Rock") so your device folders stay organized.
+
+1.  Click **🏷️ Edit Genres** at the top.
+2.  **Categories (Left):** These are the folder names that will appear on your device.
+3.  **Keywords (Right):** These are the raw genre names found in your MP3 tags.
+    * *Logic:* If you map "grunge" to the "Rock" category, any album tagged "Grunge" will be sorted into the "Rock" folder on your device.
+
+### 🛠️ Correction & Tagging Tools
+Use the middle column to fix specific albums.
+
+* **Manual Override:** Select an album and use the **Main** dropdown to change its sorting folder.
+* **Update File Tags:** Check the box **"Update File Tags"** and click **✏️ Apply Override** to permanently update the ID3 tags in your MP3 files.
+* **Find Online:** Click **🌍 Find Online** to search MusicBrainz. This will suggest the correct genre and **automatically download cover art** for you.
+* **Context Menu:** Right-click any album in the list to **Open Folder** or **Preview Track**.
+
+### ⚡ Extra Tools
+* **Mixtape Generator:** Create a random `.m3u` playlist based on a specific duration (e.g., 60 minutes).
+* **Device Manager:** Visualize storage usage and manually delete folders to free up space.
+
+---
+
+## 📜 License
 This project is open source. You are free to use, modify, distribute, and sell this software.
